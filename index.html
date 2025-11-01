@@ -68,7 +68,6 @@
 
   <div style="margin-top:12px;text-align:center">
     <button id="roll">Re-roll</button>
-    <button id="copy">Copy results</button>
     <button onclick="reset()">Back</button>
   </div>
 
@@ -119,16 +118,7 @@ function generate(){
   });
 }
 
-function copyResults(){
-  const epidemics=[e1,e2,e3,e4,e5,e6].map(e=>e.textContent.trim()).join("\n");
-  const rolesList=[...document.querySelectorAll("#roles .num")].map(r=>r.textContent).join("\n");
-  const packs=document.getElementById("packs").textContent;
-  const text=`Epidemics:\n${epidemics}\n\nEpidemic Pile Order: ${packs}\n\nRoles:\n${rolesList}`;
-  navigator.clipboard.writeText(text).then(()=>alert("Copied!"));
-}
-
 document.getElementById("roll").onclick=generate;
-document.getElementById("copy").onclick=copyResults;
 </script>
 </body>
 </html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NFC Epidemic & Role RNG</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; padding:24px; max-width:640px; margin:auto}
+  h1{margin-bottom:6px}
+  .box{background:#f6f7f8;padding:12px;border-radius:8px;margin:8px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
+  button{padding:10px 14px;font-size:16px;border-radius:8px;border:1px solid #ccc;background:white;cursor:pointer}
+  .num{font-weight:700;font-size:18px}
+  footer{margin-top:18px;color:#666;font-size:13px}
+</style>
+</head>
+<body>
+  <h1>NFC RNG — Epidemics & Roles</h1>
+  <div class="box" id="results">
+    <div class="row"><div>Epidemic 1</div><div class="num" id="e1">—</div></div>
+    <div class="row"><div>Epidemic 2</div><div class="num" id="e2">—</div></div>
+    <div class="row"><div>Epidemic 3</div><div class="num" id="e3">—</div></div>
+    <div class="row"><div>Epidemic 4</div><div class="num" id="e4">—</div></div>
+    <div class="row"><div>Epidemic 5</div><div class="num" id="e5">—</div></div>
+    <div class="row"><div>Epidemic 6</div><div class="num" id="e6">—</div></div>
+    <hr/>
+    <div class="row"><div>Role 1</div><div class="num" id="r1">—</div></div>
+    <div class="row"><div>Role 2</div><div class="num" id="r2">—</div></div>
+    <div class="row"><div>Role 3</div><div class="num" id="r3">—</div></div>
+    <div class="row"><div>Role 4</div><div class="num" id="r4">—</div></div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button id="roll">Tap / Re-roll</button>
+    <button id="copy">Copy results</button>
+  </div>
+
+  <footer>Tap the NFC tag (or open this page) to generate numbers. Reroll by tapping the button.</footer>
+
+<script>
+  // deterministic-range random integer inclusive
+  function randInt(min, max){
+    // ensure integers
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function generate(){
+    document.getElementById('e1').textContent = randInt(1,9);
+    document.getElementById('e2').textContent = randInt(1,9);
+    document.getElementById('e3').textContent = randInt(1,9);
+    document.getElementById('e4').textContent = randInt(1,8);
+    document.getElementById('e5').textContent = randInt(1,8);
+    document.getElementById('e6').textContent = randInt(1,8);
+
+    document.getElementById('r1').textContent = randInt(1,7);
+    document.getElementById('r2').textContent = randInt(1,6);
+    document.getElementById('r3').textContent = randInt(1,5);
+    document.getElementById('r4').textContent = randInt(1,4);
+  }
+
+  document.getElementById('roll').addEventListener('click', generate);
+
+  document.getElementById('copy').addEventListener('click', ()=>{
+    const lines = [
+      `Epidemic 1: ${document.getElementById('e1').textContent}`,
+      `Epidemic 2: ${document.getElementById('e2').textContent}`,
+      `Epidemic 3: ${document.getElementById('e3').textContent}`,
+      `Epidemic 4: ${document.getElementById('e4').textContent}`,
+      `Epidemic 5: ${document.getElementById('e5').textContent}`,
+      `Epidemic 6: ${document.getElementById('e6').textContent}`,
+      `Role 1: ${document.getElementById('r1').textContent}`,
+      `Role 2: ${document.getElementById('r2').textContent}`,
+      `Role 3: ${document.getElementById('r3').textContent}`,
+      `Role 4: ${document.getElementById('r4').textContent}`,
+    ].join('\n');
+    navigator.clipboard?.writeText(lines).then(()=>alert('Copied'));
+  });
+
+  // Generate automatically when page opens (so NFC tap immediately shows numbers)
+  generate();
+</script>
+</body>
+</html>

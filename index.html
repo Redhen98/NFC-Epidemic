@@ -1,1 +1,210 @@
-<!doctype html> <html lang="en"> <head> <meta charset="utf-8"/> <meta name="viewport" content="width=device-width,initial-scale=1"/> <title>Epidemic RNG — Player Setup</title> <style> :root{ color-scheme: dark; --bg:#111; --panel:#1b1b1b; --text:#f5f5f5; --accent:#2ecc71; } body{ background:var(--bg); color:var(--text); font-family:-apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial; display:flex;flex-direction:column;align-items:center; justify-content:center;height:100vh;margin:0;padding:24px; } h1{font-size:26px;margin-bottom:24px;text-align:center} .btn{ font-size:40px;font-weight:700;width:90px;height:90px; display:flex;align-items:center;justify-content:center; border-radius:12px;background:var(--panel); margin:10px;cursor:pointer;transition:all 0.2s ease; border:2px solid #222; } .btn:hover{background:var(--accent);color:#000;transform:scale(1.05)} .hidden{display:none} .box{background:var(--panel);padding:14px;border-radius:10px;width:100%;max-width:640px} .row{display:flex;justify-content:space-between;margin:6px 0} .num{font-weight:700;color:var(--accent)} .grey{color:#888;font-size:13px;margin-left:4px} hr{border:none;border-top:1px solid #333;margin:10px 0} button{padding:10px 16px;font-size:16px;border:none;border-radius:8px;font-weight:600;cursor:pointer;margin:6px;background:var(--accent);color:#000} footer{text-align:center;margin-top:12px;color:#777;font-size:13px} </style> </head> <body> <!-- Intro screen --> <div id="start"> <h1>Epidemic Role Count</h1> <div style="display:flex"> <div class="btn" onclick="startGame(2)">2</div> <div class="btn" onclick="startGame(3)">3</div> <div class="btn" onclick="startGame(4)">4</div> </div> </div> <!-- RNG screen --> <div id="game" class="hidden"> <h1>NFC RNG — Epidemics & Roles</h1> <div class="box" id="results"> <div class="row"><div>Epidemic 1</div><div class="num" id="e1">—<span class="grey">/8</span></div></div> <div class="row"><div>Epidemic 2</div><div class="num" id="e2">—<span class="grey">/8</span></div></div> <div class="row"><div>Epidemic 3</div><div class="num" id="e3">—<span class="grey">/8</span></div></div> <div class="row"><div>Epidemic 4</div><div class="num" id="e4">—<span class="grey">/9</span></div></div> <div class="row"><div>Epidemic 5</div><div class="num" id="e5">—<span class="grey">/9</span></div></div> <div class="row"><div>Epidemic 6</div><div class="num" id="e6">—<span class="grey">/9</span></div></div> <hr/> <div class="row" id="epipile"><div>Epidemic Pile Order:</div><div class="num" id="packs"></div></div> <hr/> <div id="roles"></div> </div> <div style="margin-top:12px;text-align:center"> <button id="roll">Re-roll</button> <button onclick="reset()">Back</button> </div> <footer>Numbers are randomly generated when the page loads.</footer> </div> <script> let roleCount=0; function startGame(n){ roleCount=n; document.getElementById("start").classList.add("hidden"); document.getElementById("game").classList.remove("hidden"); generate(); } function reset(){ document.getElementById("game").classList.add("hidden"); document.getElementById("start").classList.remove("hidden"); } function r(min,max){return Math.floor(Math.random()*(max-min+1))+min;} function shuffle(arr){return arr.sort(()=>Math.random()-0.5);} function generate(){ // Epidemics e1.innerHTML=r(1,8)+'<span class="grey">/8</span>'; e2.innerHTML=r(1,8)+'<span class="grey">/8</span>'; e3.innerHTML=r(1,8)+'<span class="grey">/8</span>'; e4.innerHTML=r(1,9)+'<span class="grey">/9</span>'; e5.innerHTML=r(1,9)+'<span class="grey">/9</span>'; e6.innerHTML=r(1,9)+'<span class="grey">/9</span>'; // Epidemic pile order let packs=[r(1,6),r(1,5),r(1,4),r(1,3),r(1,2)]; document.getElementById("packs").textContent=packs.join(", "); // Roles const roles=["Contingency Planner","Dispatcher","Medic","Operations Expert","Quarantine Specialist","Researcher","Scientist"]; const chosen=shuffle([...roles]).slice(0,roleCount); const rolesDiv=document.getElementById("roles"); rolesDiv.innerHTML=""; chosen.forEach((rName,i)=>{ const row=document.createElement("div"); row.className="row"; row.innerHTML=<div>Role ${i+1}</div><div class="num">${rName}</div>; rolesDiv.appendChild(row); }); } document.getElementById("roll").onclick=generate; </script> </body> </html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Epidemic RNG — Player Setup</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111;
+      --panel: #1b1b1b;
+      --text: #f5f5f5;
+      --accent: #2ecc71;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .btn {
+      font-size: 40px;
+      font-weight: 700;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--panel);
+      margin: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid #222;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .box {
+      background: var(--panel);
+      padding: 14px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+    }
+
+    .num {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .grey {
+      color: #888;
+      font-size: 13px;
+      margin-left: 4px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #333;
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 6px;
+      background: var(--accent);
+      color: #000;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 12px;
+      color: #777;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Intro screen -->
+  <div id="start">
+    <h1>Epidemic Role Count</h1>
+    <div style="display:flex">
+      <div class="btn" onclick="startGame(2)">2</div>
+      <div class="btn" onclick="startGame(3)">3</div>
+      <div class="btn" onclick="startGame(4)">4</div>
+    </div>
+  </div>
+
+  <!-- RNG screen -->
+  <div id="game" class="hidden">
+    <h1>NFC RNG — Epidemics & Roles</h1>
+    <div class="box" id="results">
+      <div class="row"><div>Epidemic 1</div><div class="num" id="e1">—<span class="grey">/8</span></div></div>
+      <div class="row"><div>Epidemic 2</div><div class="num" id="e2">—<span class="grey">/8</span></div></div>
+      <div class="row"><div>Epidemic 3</div><div class="num" id="e3">—<span class="grey">/8</span></div></div>
+      <div class="row"><div>Epidemic 4</div><div class="num" id="e4">—<span class="grey">/9</span></div></div>
+      <div class="row"><div>Epidemic 5</div><div class="num" id="e5">—<span class="grey">/9</span></div></div>
+      <div class="row"><div>Epidemic 6</div><div class="num" id="e6">—<span class="grey">/9</span></div></div>
+
+      <hr/>
+      <div class="row" id="epipile"><div>Epidemic Pile Order:</div><div class="num" id="packs"></div></div>
+      <hr/>
+      <div id="roles"></div>
+    </div>
+
+    <div style="margin-top:12px;text-align:center">
+      <button id="roll">Re-roll</button>
+      <button onclick="reset()">Back</button>
+    </div>
+
+    <footer>Numbers are randomly generated when the page loads.</footer>
+  </div>
+
+  <script>
+    let roleCount = 0;
+
+    function startGame(n) {
+      roleCount = n;
+      document.getElementById("start").classList.add("hidden");
+      document.getElementById("game").classList.remove("hidden");
+      generate();
+    }
+
+    function reset() {
+      document.getElementById("game").classList.add("hidden");
+      document.getElementById("start").classList.remove("hidden");
+    }
+
+    function r(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function generate() {
+      // Epidemics
+      e1.innerHTML = r(1, 8) + '<span class="grey">/8</span>';
+      e2.innerHTML = r(1, 8) + '<span class="grey">/8</span>';
+      e3.innerHTML = r(1, 8) + '<span class="grey">/8</span>';
+      e4.innerHTML = r(1, 9) + '<span class="grey">/9</span>';
+      e5.innerHTML = r(1, 9) + '<span class="grey">/9</span>';
+      e6.innerHTML = r(1, 9) + '<span class="grey">/9</span>';
+
+      // Epidemic pile order
+      let packs = [r(1, 6), r(1, 5), r(1, 4), r(1, 3), r(1, 2)];
+      document.getElementById("packs").textContent = packs.join(", ");
+
+      // Roles
+      const roles = [
+        "Contingency Planner",
+        "Dispatcher",
+        "Medic",
+        "Operations Expert",
+        "Quarantine Specialist",
+        "Researcher",
+        "Scientist"
+      ];
+      const chosen = shuffle([...roles]).slice(0, roleCount);
+      const rolesDiv = document.getElementById("roles");
+      rolesDiv.innerHTML = "";
+
+      chosen.forEach((rName, i) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `<div>Role ${i + 1}</div><div class="num">${rName}</div>`;
+        rolesDiv.appendChild(row);
+      });
+    }
+
+    document.getElementById("roll").onclick = generate;
+  </script>
+</body>
+</html>
